@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Registro — Sistema de Seguridad</title>
+    <meta name="description" content="Formulario de registro de nuevos usuarios"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+
+            <!-- Header -->
+            <div class="card-header">
+                <div class="icon">📝</div>
+                <h1>Crear Cuenta</h1>
+                <p>Registre sus datos para acceder al sistema</p>
+            </div>
+
+            <!-- Formulario de registro -->
+            <form th:action="@{/registro}" th:object="${usuario}" method="post">
+
+                <!-- Nombre -->
+                <div class="form-group">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" th:field="*{nombre}"
+                           placeholder="Juan Pérez" required/>
+                    <div th:if="${#fields.hasErrors('nombre')}" class="field-error">
+                        <span th:errors="*{nombre}"></span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" th:field="*{email}"
+                           placeholder="usuario@correo.com" required/>
+                    <div th:if="${#fields.hasErrors('email')}" class="field-error">
+                        <span th:errors="*{email}"></span>
+                    </div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="form-group">
+                    <label for="contrasenia">Contraseña</label>
+                    <input type="password" id="contrasenia" th:field="*{contrasenia}"
+                           placeholder="Mínimo 6 caracteres" required/>
+                    <div th:if="${#fields.hasErrors('contrasenia')}" class="field-error">
+                        <span th:errors="*{contrasenia}"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+
+            <div class="text-center mt-2">
+                <a th:href="@{/login}" class="link">¿Ya tiene cuenta? Iniciar sesión</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

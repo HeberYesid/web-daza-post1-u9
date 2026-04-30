@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard — Sistema de Seguridad</title>
+    <meta name="description" content="Panel principal del usuario autenticado"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="dashboard-body">
+
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">🔒 Sistema de Seguridad</a>
+        <div class="navbar-user">
+            <span>👤 <span sec:authentication="name">usuario</span></span>
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <button type="submit" class="btn btn-danger btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="dashboard-content">
+
+        <!-- Card de bienvenida -->
+        <div class="welcome-card">
+            <h1>Bienvenido, <span th:text="${usuario}">usuario</span></h1>
+            <p>Has iniciado sesión correctamente en el sistema.</p>
+            <div style="margin-top: 0.75rem;">
+                <!-- Badge para ADMIN -->
+                <span sec:authorize="hasRole('ADMIN')" class="role-badge role-badge-admin">
+                    🛡️ Administrador
+                </span>
+                <!-- Badge para USER -->
+                <span sec:authorize="hasRole('USER')" class="role-badge role-badge-user">
+                    👤 Usuario Estándar
+                </span>
+            </div>
+        </div>
+
+        <!-- Grid de estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Rol Actual</h3>
+                <div class="value" sec:authorize="hasRole('ADMIN')">Admin</div>
+                <div class="value" sec:authorize="hasRole('USER')">Usuario</div>
+            </div>
+            <div class="stat-card">
+                <h3>Estado</h3>
+                <div class="value" style="color: var(--success);">Activo</div>
+            </div>
+            <div class="stat-card">
+                <h3>Sesión</h3>
+                <div class="value" style="font-size: 1.25rem;">Autenticada</div>
+            </div>
+        </div>
+
+        <!-- Acciones según rol -->
+        <div class="stats-grid">
+            <!-- Solo visible para ADMIN -->
+            <div sec:authorize="hasRole('ADMIN')" class="stat-card">
+                <h3>Administración</h3>
+                <p style="margin: 0.5rem 0; font-size: 0.875rem; color: var(--gray-500);">
+                    Gestiona usuarios registrados
+                </p>
+                <a th:href="@{/admin}" class="btn btn-outline btn-sm">
+                    Panel de Administración →
+                </a>
+            </div>
+
+            <!-- Solo visible para USER -->
+            <div sec:authorize="hasRole('USER')" class="stat-card">
+                <h3>Información</h3>
+                <p style="margin: 0.5rem 0; font-size: 0.875rem; color: var(--gray-500);">
+                    Acceso de usuario estándar. No tiene permisos de administración.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

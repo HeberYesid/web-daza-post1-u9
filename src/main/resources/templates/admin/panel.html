@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Panel de Administración — Sistema de Seguridad</title>
+    <meta name="description" content="Panel administrativo para gestión de usuarios"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="dashboard-body">
+
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">🔒 Sistema de Seguridad</a>
+        <div class="navbar-user">
+            <span>🛡️ <span sec:authentication="name">admin</span></span>
+            <a th:href="@{/dashboard}" class="btn btn-outline btn-sm">← Dashboard</a>
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <button type="submit" class="btn btn-danger btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="dashboard-content">
+
+        <!-- Encabezado -->
+        <div class="welcome-card">
+            <h1>🛡️ Panel de Administración</h1>
+            <p>Gestión de usuarios registrados en el sistema</p>
+        </div>
+
+        <!-- Tabla de usuarios -->
+        <div class="table-container">
+            <div class="table-header">
+                <h2>Usuarios Registrados</h2>
+                <span class="badge badge-admin"
+                      th:text="${#lists.size(usuarios)} + ' usuarios'">0 usuarios</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="u : ${usuarios}">
+                        <td th:text="${u.id}">1</td>
+                        <td th:text="${u.nombre}">Nombre</td>
+                        <td th:text="${u.email}">email@correo.com</td>
+                        <td>
+                            <span th:if="${u.rol == 'ROLE_ADMIN'}" class="badge badge-admin">
+                                ADMIN
+                            </span>
+                            <span th:if="${u.rol == 'ROLE_USER'}" class="badge badge-user">
+                                USER
+                            </span>
+                        </td>
+                        <td>
+                            <span th:if="${u.activo}" class="badge badge-active">Activo</span>
+                            <span th:unless="${u.activo}" class="badge badge-inactive">Inactivo</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
